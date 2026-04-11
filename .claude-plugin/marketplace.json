@@ -61,6 +61,15 @@
       "skills": [
         "./skills/bdi-mental-states"
       ]
+    },
+    {
+      "name": "agent-operations",
+      "description": "Operational skills for running production AI agent systems: capacity planning, resource forecasting, API rate limit management, SLA design, and cost modeling",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/operations-capacity-plan"
+      ]
     }
   ]
 }

@@ -124,7 +124,7 @@ agent.memory.reset()
 
 ### Tool Integration
 
-Tools in atomic-agents are Python callables registered via `agent.register_tool()`. The framework wraps them in Pydantic schemas for validation. Unlike tool-calling in raw OpenAI, the tool schema is derived from the function signature's type hints — there is no separate JSON schema to maintain.
+Tools in atomic-agents are Python callables that can be provided to an agent, for example via the `tools=[...]` constructor argument. The framework wraps them in Pydantic schemas for validation. Unlike tool-calling in raw OpenAI, the tool schema is derived from the function signature's type hints — there is no separate JSON schema to maintain.
 
 ```python
 from atomic_agents import tool

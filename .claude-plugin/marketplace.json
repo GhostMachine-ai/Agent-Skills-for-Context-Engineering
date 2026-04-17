@@ -61,6 +61,15 @@
       "skills": [
         "./skills/bdi-mental-states"
       ]
+    },
+    {
+      "name": "atomic-agents",
+      "description": "Framework-specific skill for building modular, type-safe AI agents with the atomic-agents Python library, covering BaseAgent, BaseIOSchema, system prompt context providers, multi-provider setup, memory management, tool integration, and agent composition patterns",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/atomic-agents"
+      ]
     }
   ]
 }

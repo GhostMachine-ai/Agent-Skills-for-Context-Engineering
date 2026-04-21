@@ -2,6 +2,8 @@
 
 A comprehensive, open collection of Agent Skills focused on context engineering principles for building production-grade AI agent systems. These skills teach the art and science of curating context to maximize agent effectiveness across any agent platform.
 
+[DeepWiki: Learn more here](https://deepwiki.com/muratcankoylan/Agent-Skills-for-Context-Engineering)
+
 ## What is Context Engineering?
 
 Context engineering is the discipline of managing the language model's context window. Unlike prompt engineering, which focuses on crafting effective instructions, context engineering addresses the holistic curation of all information that enters the model's limited attention budget: system prompts, tool definitions, retrieved documents, message history, and tool outputs.
@@ -47,6 +49,7 @@ These skills address the ongoing operation and optimization of agent systems.
 | Skill | Description |
 |-------|-------------|
 | [context-optimization](skills/context-optimization/) | Apply compaction, masking, and caching strategies |
+| [latent-briefing](skills/latent-briefing/) | Share task-relevant orchestrator state with workers via task-guided KV cache compaction when the worker runtime is controllable |
 | [evaluation](skills/evaluation/) | Build evaluation frameworks for agent systems |
 | [advanced-evaluation](skills/advanced-evaluation/) | Master LLM-as-a-Judge techniques: direct scoring, pairwise comparison, rubric generation, and bias mitigation |
 
@@ -96,33 +99,21 @@ Run this command in Claude Code to register this repository as a plugin source:
 /plugin marketplace add muratcankoylan/Agent-Skills-for-Context-Engineering
 ```
 
-**Step 2: Browse and Install**
+**Step 2: Install the Plugin**
 
-Option A - Browse available plugins:
+Option A - Browse and install:
 1. Select `Browse and install plugins`
 2. Select `context-engineering-marketplace`
-3. Choose a plugin (e.g., `context-engineering-fundamentals`, `agent-architecture`)
+3. Select `context-engineering`
 4. Select `Install now`
 
 Option B - Direct install via command:
 
 ```
-/plugin install context-engineering-fundamentals@context-engineering-marketplace
-/plugin install agent-architecture@context-engineering-marketplace
-/plugin install agent-evaluation@context-engineering-marketplace
-/plugin install agent-development@context-engineering-marketplace
-/plugin install cognitive-architecture@context-engineering-marketplace
+/plugin install context-engineering@context-engineering-marketplace
 ```
 
-### Available Plugins
-
-| Plugin | Skills Included |
-|--------|-----------------|
-| `context-engineering-fundamentals` | context-fundamentals, context-degradation, context-compression, context-optimization |
-| `agent-architecture` | multi-agent-patterns, memory-systems, tool-design, filesystem-context, hosted-agents |
-| `agent-evaluation` | evaluation, advanced-evaluation |
-| `agent-development` | project-development |
-| `cognitive-architecture` | bdi-mental-states |
+This installs all 14 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Triggers
 
@@ -132,6 +123,7 @@ Option B - Direct install via command:
 | `context-degradation` | "diagnose context problems", "fix lost-in-middle", "debug agent failures" |
 | `context-compression` | "compress context", "summarize conversation", "reduce token usage" |
 | `context-optimization` | "optimize context", "reduce token costs", "implement KV-cache" |
+| `latent-briefing` | "KV cache compaction between agents", "worker KV memory handoff", "latent briefing", "share trajectory without summarization" |
 | `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
 | `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
 | `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
@@ -144,9 +136,24 @@ Option B - Direct install via command:
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 
-### For Cursor & Codex & IDE
+### For Cursor (Open Plugins)
 
-Copy skill content into `.rules` or create project-specific Skills folders. The skills provide the context and guidelines that agent needs for effective context engineering and agent design.
+This repository is listed on the [Cursor Plugin Directory](https://cursor.directory/plugins/context-engineering).
+
+The `.plugin/plugin.json` manifest follows the [Open Plugins](https://open-plugins.com) standard, so the repo also works with any conformant agent tool (Codex, GitHub Copilot, etc.).
+
+### Using Individual Skills
+
+To use a single skill without installing the full plugin, copy its `SKILL.md` directly into your project's `.claude/skills/` directory:
+
+```bash
+# Example: add just the context-fundamentals skill
+mkdir -p .claude/skills
+curl -o .claude/skills/context-fundamentals.md \
+  https://raw.githubusercontent.com/muratcankoylan/Agent-Skills-for-Context-Engineering/main/skills/context-fundamentals/SKILL.md
+```
+
+Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `project-development`, `bdi-mental-states`
 
 ### For Custom Implementations
 
@@ -200,7 +207,7 @@ The [book-sft-pipeline](examples/book-sft-pipeline/) example demonstrates traini
 Integrates with context engineering skills: project-development, context-compression, multi-agent-patterns, evaluation.
 
 ## Star History
-<img width="3664" height="2648" alt="star-history-2026113" src="https://github.com/user-attachments/assets/c60fd73f-4a6c-4679-b7c6-bb8ebf2f3a48" />
+<img width="3664" height="2648" alt="star-history-2026317" src="https://github.com/user-attachments/assets/0fe53d8d-7fdd-45be-9c28-057881b23b44" />
 
 ## Structure
 

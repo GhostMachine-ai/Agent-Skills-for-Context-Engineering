@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent Skills For Context Engineering"
+  short_description: "Repo-specific patterns and workflows for Agent-Skills-for-Context-Engineering"
+  default_prompt: "Use the Agent-Skills-for-Context-Engineering repo skill to follow existing architecture, testing, and workflow conventions."
+policy:
+  allow_implicit_invocation: true

@@ -1,6 +1,6 @@
 ---
 name: system-design-metrics
-description: This skill should be used when the user asks to "estimate agent costs", "design latency budgets", "plan capacity", "set SLA targets", "measure throughput", or mentions cost-per-task modeling, error budgets, token economics, operational health metrics, or scalability analysis for agent systems.
+description: "This skill should be used when the user asks to \"estimate agent costs\", \"design latency budgets\", \"plan capacity\", \"set SLA targets\", \"measure throughput\", or mentions cost-per-task modeling, error budgets, token economics, operational health metrics, or scalability analysis for agent systems."
 ---
 
 # System Design Metrics for Agent Systems
@@ -21,10 +21,11 @@ Activate this skill when:
 - Diagnosing throughput bottlenecks or rate-limit issues
 - Sizing infrastructure for multi-agent deployments
 
-**Do not activate** for:
-- Measuring output quality, factual accuracy, or rubric-based scoring — use **evaluation**
-- LLM-as-judge techniques, pairwise comparison, or bias mitigation — use **advanced-evaluation**
-- Context window management or compression strategies — use **context-optimization** or **context-compression**
+Do not activate this skill for adjacent work owned by other skills:
+- Deciding whether an answer is correct or good enough to ship: `evaluation`.
+- Designing the model-based grader itself: `advanced-evaluation`.
+- Choosing masking, prefix-reuse, or partitioning tactics to spend fewer tokens: `context-optimization`.
+- Turning a long session into a structured handoff: `context-compression`.
 
 ## Core Concepts
 
@@ -46,9 +47,13 @@ Evaluation skills answer "how good is the output?" This skill answers "how fast,
 The most actionable metric for agent economics is **cost-per-task**: the total cost of completing one end-user task, including all model calls, tool invocations, retries, and infrastructure. It collapses token costs, multi-step chains, and retry overhead into a single comparable unit.
 
 ```
-cost_per_task = Σ (input_tokens × input_price + output_tokens × output_price
-                   + cached_tokens × cache_price) across all calls per task
+cost_per_task = Σ (uncached_input × input_price
+                   + cached_input   × cache_price
+                   + output_tokens  × output_price)  over every call in the task,
+                                                     retries included
               + tool_execution_costs + infrastructure_overhead
+
+# uncached_input and cached_input are disjoint: a token is billed once, at one rate.
 ```
 
 ## Detailed Topics
@@ -79,13 +84,17 @@ In multi-agent systems, latency depends on the orchestration pattern:
 Allocate a total latency target, then partition across components:
 
 ```
-User-facing SLA: T seconds
-├── Orchestrator planning:     allocation_1
-├── Worker A (parallel):       allocation_2
-├── Worker B (parallel):       allocation_3
-├── Result aggregation:        allocation_4
-└── Buffer:                    allocation_5 (always reserve buffer)
+User-facing SLA: 10s at P95
+├── Orchestrator planning:      1.5s
+├── Workers A+B (parallel):     6.5s   <- budget the SLOWEST worker, not the sum
+├── Result aggregation:         1.0s
+└── Buffer:                     1.0s
+                                ─────
+                                10.0s
 ```
+
+Budget parallel branches at their maximum, not their total. Summing concurrent workers
+inflates the budget and hides the fact that one slow worker sets the floor.
 
 **Percentile Thinking**
 
@@ -97,15 +106,22 @@ Averages hide tail latency. Track P50 (median experience), P95 (degraded experie
 
 Model pricing has three tiers that directly affect agent economics:
 
-| Token Type | Relative Cost | Optimization Lever |
+| Token Type | Cost Behavior | Optimization Lever |
 |-----------|--------------|-------------------|
-| Input (uncached) | Baseline | Reduce prompt size, remove redundant context |
-| Input (cached) | Fraction of uncached | Maximize prefix cache hits via stable prefixes |
-| Output | Multiple of input | Constrain output format, use structured responses |
+| Input (uncached) | Baseline rate — call it 1 unit | Reduce prompt size, remove redundant context |
+| Input (cached) | Small fraction of a cache miss | Maximize prefix cache hits via stable prefixes |
+| Output | Several times the input rate | Constrain output format, use structured responses |
+
+Substitute your provider's current published rates before modeling — the exact multipliers
+move, but the ordering (cached input < uncached input < output) is stable across providers
+and is what drives the optimization levers above.
 
 **Cost Scaling with Context Length**
 
-Cost grows linearly with input token count, but agent sessions accumulate context across turns. Multi-turn conversations with tool outputs grow the input significantly per request, making later turns dramatically more expensive than earlier ones.
+Cost grows linearly with input token count, but agent sessions accumulate context across
+turns. A session that starts at 2K input tokens and grows to 60K by turn 10 costs 30× more
+per request at the end than at the start, for the same user-visible action. The average cost
+per turn is therefore a poor planning number — model the cost of the *last* turn.
 
 **Cost Optimization Levers**
 
@@ -117,7 +133,10 @@ Cost grows linearly with input token count, but agent sessions accumulate contex
 
 **Multi-Step Cost Accumulation**
 
-Agent tasks compound costs across steps. A pipeline with N model calls costs roughly N× a single-call system. Multi-agent architectures multiply this further when supervisors maintain full conversation histories.
+Agent tasks compound costs across steps. A pipeline with 5 model calls averaging 2K input and
+500 output tokens each costs roughly 5× a single-call system. Multi-agent architectures
+multiply this further when supervisors maintain full conversation histories: a supervisor
+that replays its whole trajectory to each of 3 workers pays for that trajectory 4 times.
 
 ### Reliability and Error Budgets
 
@@ -125,13 +144,16 @@ Agent tasks compound costs across steps. A pipeline with N model calls costs rou
 
 Agent failures have distinct root causes requiring different mitigations:
 
-| Failure Type | Typical Rate | Mitigation |
-|-------------|-------------|-----------|
-| Model API errors (429, 500) | Low | Retry with exponential backoff |
-| Tool execution failures | Low–moderate | Retry, fallback tools, error context |
-| Malformed output (parse failures) | Low–moderate | Structured output, retry with correction |
-| Incorrect reasoning | Moderate–high | Better prompts, evaluation gates, model upgrade |
-| Timeout | Low | Latency budgets, circuit breakers |
+| Failure Type | What Drives It | Mitigation |
+|-------------|---------------|-----------|
+| Model API errors (429, 500) | Rate-limit pressure, provider incidents | Retry with exponential backoff |
+| Tool execution failures | Network, auth, upstream outages | Retry, fallback tools, error context |
+| Malformed output (parse failures) | Loose output contracts, long generations | Structured output, retry with correction |
+| Incorrect reasoning | Task difficulty, weak prompts, thin context | Better prompts, evaluation gates, model upgrade |
+| Timeout | Tail latency exceeding the budget | Latency budgets, circuit breakers |
+
+Measure your own rates per category rather than assuming published ones — the mix varies far
+more by workload than by model, and the mitigation you need depends on which row dominates.
 
 **Error Budgets**
 
@@ -145,7 +167,14 @@ budget_burn_rate = failures_last_hour × hours_remaining_in_month
 
 **Cascade Failure in Multi-Agent Systems**
 
-When agents depend on other agents, failures multiply. If each of N serial agents has reliability R, the pipeline's reliability is R^N (multiplicative). Mitigations: retry at each stage, circuit breakers to prevent retry storms, fallback paths that skip non-critical stages.
+When agents depend on other agents, failures multiply. If each of N serial agents has
+reliability R, pipeline reliability is R^N. Three agents at 95% each yield
+0.95³ ≈ 85.7% — a 14% failure rate assembled entirely from components that each look
+healthy in isolation. Five agents at 96% yield 0.96⁵ ≈ 81.5%.
+
+This is why per-agent success rate is a misleading headline metric: it is the product that
+reaches the user. Mitigations: retry at each stage, circuit breakers to prevent retry storms,
+and fallback paths that skip non-critical stages.
 
 **Graceful Degradation**
 
@@ -183,15 +212,18 @@ Track what fraction of the context window is consumed and how it breaks down:
 
 ```
 utilization = total_tokens_in_context / model_max_context
-breakdown:
-  system_prompt:    [measured %]
-  tool_definitions: [measured %]
-  conversation:     [measured %]
-  tool_outputs:     [measured %]
-  available:        [remaining %]
+breakdown (example of a session under pressure):
+  system_prompt:    15%
+  tool_definitions: 10%
+  conversation:     45%
+  tool_outputs:     25%
+  available:         5%
 ```
 
-When utilization is high, compression or context management strategies become urgent. Near-full utilization means the system is operating at the edge of failure.
+Past roughly 80% utilization, compression or context management becomes urgent. At 95% the
+system is one large tool output away from failing the request outright. Track the breakdown,
+not just the total — a context that is 25% tool outputs points at masking or offloading,
+while one that is 45% conversation points at compaction.
 
 **Cache Hit Rates**
 
@@ -215,9 +247,9 @@ Not every system needs every metric. Prioritize based on system maturity:
 
 ### Anti-Patterns
 
-**Measuring averages instead of percentiles**: A low average latency can mask extreme tail latency. Always track percentiles for latency metrics.
+**Measuring averages instead of percentiles**: A 2s average latency is compatible with a 30s P99. If 1 in 100 tasks takes 30s and you serve 10,000 tasks a day, that is 100 users a day having a bad time while the dashboard looks fine. Always track percentiles.
 
-**Ignoring cost until production**: Token costs compound fast. A cheap-seeming per-task cost multiplied by high daily volume produces significant annual spend. Model cost early.
+**Ignoring cost until production**: Token costs compound fast. $0.05 per task is $5/day at 100 tasks/day and $182K/year at 10,000 tasks/day. The per-task figure that looked negligible in the prototype is the whole budget at scale. Model cost early.
 
 **Vanity throughput metrics**: "Our system handles 1000 requests/minute" means nothing without specifying task complexity, quality thresholds, and error rates at that load.
 
@@ -228,35 +260,48 @@ Not every system needs every metric. Prioritize based on system maturity:
 ## Examples
 
 **Example 1: Cost-Per-Task Calculator**
+
+Two conventions matter here. First, `model_calls` is the *observed* trace, so retries are
+already in it — do not add a retry multiplier on top or you bill them twice. Second,
+`uncached_input_tokens` must exclude `cached_tokens`; providers differ on whether their
+reported input count already includes cache reads, so normalize at ingestion.
+
 ```python
 def calculate_cost_per_task(task_trace):
-    total_cost = 0
+    """Cost of one completed task. task_trace.model_calls includes retried calls."""
+    total_cost = 0.0
     for call in task_trace.model_calls:
-        input_cost = call.input_tokens * call.model.input_price_per_token
-        cached_cost = call.cached_tokens * call.model.cached_price_per_token
-        output_cost = call.output_tokens * call.model.output_price_per_token
-        total_cost += input_cost + cached_cost + output_cost
+        # uncached_input_tokens and cached_tokens must be disjoint.
+        total_cost += call.uncached_input_tokens * call.model.input_price_per_token
+        total_cost += call.cached_tokens * call.model.cached_price_per_token
+        total_cost += call.output_tokens * call.model.output_price_per_token
 
     for tool_call in task_trace.tool_calls:
         total_cost += tool_call.compute_cost
 
-    total_cost += total_cost * task_trace.retry_overhead_ratio
     return total_cost
+
+
+def project_cost_per_task(single_attempt_cost, retry_overhead_ratio):
+    """Forward projection, for when you have no trace yet. Do not combine with the above."""
+    return single_attempt_cost * (1 + retry_overhead_ratio)
 ```
 
 **Example 2: Latency Budget for Supervisor-Worker Pattern**
 ```python
 def check_latency_budget(task_result, budget):
+    # Parallel workers contribute their maximum, not their sum.
     components = {
         "planning": task_result.planning_latency_ms,
-        "worker_max": max(w.latency_ms for w in task_result.workers),
+        "worker_max": max((w.latency_ms for w in task_result.workers), default=0),
         "aggregation": task_result.aggregation_latency_ms,
     }
     total = sum(components.values())
     budget_remaining = budget.total_ms - total
 
+    # Unbudgeted components are reported, never silently exempt.
     violations = {k: v for k, v in components.items()
-                  if v > budget.component_limits[k]}
+                  if v > budget.component_limits.get(k, float("inf"))}
 
     return {
         "total_ms": total,
@@ -269,16 +314,30 @@ def check_latency_budget(task_result, budget):
 **Example 3: Error Budget Tracker**
 ```python
 def check_error_budget(slo_target, period_tasks, period_failures):
+    """burn_rate > 1.0 means the budget for the period is already overspent."""
     budget_total = period_tasks * (1 - slo_target)
-    budget_consumed = period_failures
-    budget_remaining = budget_total - budget_consumed
-    burn_rate = period_failures / max(budget_total, 1)
+
+    # A 100% SLO leaves no budget; any failure is an immediate breach. Guard once,
+    # and do not clamp the divisor -- clamping understates burn for small budgets
+    # (500 tasks at 99.9% is a budget of 0.5, where one failure is a burn rate of 2.0).
+    if budget_total <= 0:
+        return {
+            "slo_target": slo_target,
+            "budget_total": 0.0,
+            "budget_consumed": period_failures,
+            "budget_remaining_pct": 0.0,
+            "burn_rate": float("inf") if period_failures else 0.0,
+            "alert": bool(period_failures),
+        }
+
+    burn_rate = period_failures / budget_total
+    budget_remaining = budget_total - period_failures
 
     return {
         "slo_target": slo_target,
         "budget_total": budget_total,
-        "budget_consumed": budget_consumed,
-        "budget_remaining_pct": max(0, budget_remaining / budget_total * 100),
+        "budget_consumed": period_failures,
+        "budget_remaining_pct": max(0.0, budget_remaining / budget_total * 100),
         "burn_rate": burn_rate,
         "alert": burn_rate > 0.8,
     }
@@ -299,7 +358,7 @@ def check_error_budget(slo_target, period_tasks, period_failures):
 
 ## Gotchas
 
-1. **Token cost surprises from long contexts**: Input costs scale linearly with token count. Agent sessions that accumulate context across many turns can silently reach expensive input sizes.
+1. **Token cost surprises from long contexts**: Input cost scales linearly with token count, so a 100K-token context costs 10× a 10K-token one for the identical request. Sessions reach that silently by accumulating tool outputs nobody re-reads.
 2. **Latency variance from provider queuing**: Model API latency can spike substantially during peak hours. Design for P99, not P50.
 3. **Retry storms in multi-agent systems**: A supervisor retrying a failing worker, which itself retries a failing tool, creates exponential request amplification. Use per-layer retry limits and circuit breakers.
 4. **Cache invalidation costs**: Changing system prompts, tool definitions, or their ordering invalidates prefix caches, causing sudden cost increases.
@@ -308,13 +367,13 @@ def check_error_budget(slo_target, period_tasks, period_failures):
 
 ## Integration
 
-- **evaluation** — System metrics complement output quality metrics; both are needed for production readiness
-- **advanced-evaluation** — Cost and latency constraints inform evaluation pipeline design (e.g., choosing cheaper judges for high-volume evaluation)
-- **context-optimization** — Compression and caching techniques directly affect cost and latency metrics
-- **context-compression** — Compression strategies reduce token costs and latency at the expense of potential quality loss
-- **multi-agent-patterns** — Orchestration pattern choice (serial vs. parallel, supervisor vs. peer) determines latency and reliability profiles
-- **tool-design** — Tool response format and error handling affect both latency (payload size) and reliability (parse failures)
-- **hosted-agents** — Infrastructure choices (warm pools, pre-built images, sandbox sizing) affect throughput and latency
+- evaluation - Sets the quality bar this skill budgets around; both are needed for production readiness
+- advanced-evaluation - Cost and latency ceilings constrain judge selection for high-volume grading
+- context-optimization - Supplies the tactics that move the cost and latency numbers this skill targets
+- context-compression - Trades token cost and latency against potential quality loss
+- multi-agent-patterns - Topology choice (serial vs. parallel) determines latency and cascade-reliability profiles
+- tool-design - Response format and error handling drive latency (payload size) and reliability (parse failures)
+- hosted-agents - Warm pools, pre-built images, and sandbox sizing set the throughput and cold-start floor
 
 ## References
 
@@ -332,7 +391,7 @@ External resources:
 
 ## Skill Metadata
 
-**Created**: 2026-07-26
-**Last Updated**: 2026-07-26
+**Created**: 2026-08-06
+**Last Updated**: 2026-08-06
 **Author**: Agent Skills for Context Engineering Contributors
 **Version**: 1.0.0

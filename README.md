@@ -124,13 +124,7 @@ Option B - Direct install via command:
 /plugin install context-engineering@context-engineering-marketplace
 ```
 
-This installs all 15 skills in a single plugin. Skills are activated automatically based on your task context.
-
-To also install the AI delivery methodology skills:
-
-```
-/plugin install ai-delivery-methodology@context-engineering-marketplace
-```
+This installs all 18 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Activation Scenarios
 

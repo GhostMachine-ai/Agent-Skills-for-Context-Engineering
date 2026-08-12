@@ -260,6 +260,9 @@ This skill owns outcome measurement and quality gates. Adjacent skills own speci
 - `multi-agent-patterns`: evaluating coordination quality and parallelization trade-offs.
 - `tool-design`: evaluating tool selection and recovery effectiveness.
 - `memory-systems`: evaluating memory retrieval and retention quality.
+- `ai-delivery-process`: phase-gated evaluation — the evaluation rubric is defined in Alpha as a required deliverable before Beta. When the question is "what artefacts does the evaluation need to produce for the Alpha gate?" route there; when the question is "how do I design the rubric dimensions and scoring anchors," route here.
+- `agent-observability`: production sampling strategy, drift detection thresholds, and alerting — the live quality monitoring programme that runs the evaluation on a continuous basis.
+- `human-ai-collaboration`: when evaluation results determine HITL triggers — which outputs below a rubric threshold must be reviewed by a human reviewer before reaching users.
 
 ## References
 

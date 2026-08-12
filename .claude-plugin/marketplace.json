@@ -40,6 +40,17 @@
       "skills": [
         "./skills/atomic-agents"
       ]
+    },
+    {
+      "name": "ai-delivery-methodology",
+      "description": "Skills for teams delivering AI agent systems through the full agile delivery lifecycle: adapted phase-gate process with AI-specific artefacts (Data Availability Matrix, Evaluation Rubric, HITL Map, Prompt Version History), production observability (metrics, drift detection, prompt versioning), and human-AI collaboration design (automation spectrum, HITL Map, trust calibration, oversight fatigue).",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/ai-delivery-process",
+        "./skills/agent-observability",
+        "./skills/human-ai-collaboration"
+      ]
     }
   ]
 }

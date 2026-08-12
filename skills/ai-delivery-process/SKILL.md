@@ -180,15 +180,15 @@ AI additions:
 
 ## Gotchas
 
-**Rubric defined after the prototype is built**: When success criteria are defined after building begins, teams optimise for what they built rather than what users need. The evaluation rubric must precede any automated prototype — it is a Discovery and Alpha output, not a Beta deliverable.
+1. **Rubric defined after the prototype is built**: When success criteria are defined after building begins, teams optimise for what they built rather than what users need. The evaluation rubric must precede any automated prototype — it is a Discovery and Alpha output, not a Beta deliverable.
 
-**Treating a prompt change as a configuration change**: Prompt changes significantly alter model behaviour. Teams that deploy prompt changes without rubric testing and staged rollout discover regressions in production rather than in evaluation. Every prompt change is a deployment: version it, test it, stage it.
+2. **Treating a prompt change as a configuration change**: Prompt changes significantly alter model behaviour. Teams that deploy prompt changes without rubric testing and staged rollout discover regressions in production rather than in evaluation. Every prompt change is a deployment: version it, test it, stage it.
 
-**Underestimating model dependency risk**: A model version pinned in Alpha may be deprecated during Beta or Live. Teams without a deprecation plan scramble when the provider announces end-of-life with a 90-day window. Write the plan in Beta when planning is cheap.
+3. **Underestimating model dependency risk**: A model version pinned in Alpha may be deprecated during Beta or Live. Teams without a deprecation plan scramble when the provider announces end-of-life with a 90-day window. Write the plan in Beta when planning is cheap.
 
-**Skipping the manual prototype phase**: Teams that start directly with an LLM prototype discover intractable problems — ambiguous task definition, insufficient data, unacceptable non-determinism — after investing significantly more effort. The manual prototype phase is a rapid tractability test, not a waterfall holdover.
+4. **Skipping the manual prototype phase**: Teams that start directly with an LLM prototype discover intractable problems — ambiguous task definition, insufficient data, unacceptable non-determinism — after investing significantly more effort. The manual prototype phase is a rapid tractability test, not a waterfall holdover.
 
-**HITL Map as an engineering artefact**: The HITL Map is a user research output, not an engineering output. Teams that design human review requirements based on their engineering model of risk, rather than on user research into trust and accountability needs, frequently discover that users require human review for legal or trust reasons even when the AI is accurate.
+5. **HITL Map as an engineering artefact**: The HITL Map is a user research output, not an engineering output. Teams that design human review requirements based on their engineering model of risk, rather than on user research into trust and accountability needs, frequently discover that users require human review for legal or trust reasons even when the AI is accurate.
 
 ## Integration
 

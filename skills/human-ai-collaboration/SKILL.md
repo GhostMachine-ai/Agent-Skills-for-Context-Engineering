@@ -164,15 +164,15 @@ Trigger for next expansion: reviewer agreement rate > 90% sustained over 4 weeks
 
 ## Gotchas
 
-**"Human review" as a liability shield without resources**: Teams add human review to high-stakes decisions for legal compliance, then do not resource the review queue. Reviewers approve AI outputs reflexively without reading them. This creates the worst outcome: nominal human oversight with no actual human judgment. Design the review queue as a product with its own SLA, tooling, and staffing capacity.
+1. **"Human review" as a liability shield without resources**: Teams add human review to high-stakes decisions for legal compliance, then do not resource the review queue. Reviewers approve AI outputs reflexively without reading them. This creates the worst outcome: nominal human oversight with no actual human judgment. Design the review queue as a product with its own SLA, tooling, and staffing capacity.
 
-**Automation level determined by technical capability alone**: The automation level is calibrated by consequence magnitude × (1 - AI confidence) × (1 / reviewer capacity). Teams that set automation levels based solely on AI accuracy over-automate high-consequence decisions and under-automate low-consequence ones where reviewer capacity is the binding constraint.
+2. **Automation level determined by technical capability alone**: The automation level is calibrated by consequence magnitude × (1 - AI confidence) × (1 / reviewer capacity). Teams that set automation levels based solely on AI accuracy over-automate high-consequence decisions and under-automate low-consequence ones where reviewer capacity is the binding constraint.
 
-**Oversight fatigue onset is invisible at first**: Reviewer agreement rates rising toward 100% feel like success. They are a leading indicator of oversight fatigue — reviewers approving outputs without reading them. Monitor agreement rates as a two-tailed metric: sustained very-low rates (genuine disagreement warranting investigation) and sustained very-high rates (reflexive approval) both require action.
+3. **Oversight fatigue onset is invisible at first**: Reviewer agreement rates rising toward very high levels feel like success. They are a leading indicator of oversight fatigue — reviewers approving outputs without reading them. Monitor agreement rates as a two-tailed metric: sustained very-low rates (genuine disagreement warranting investigation) and sustained very-high rates (reflexive approval) both require action.
 
-**Confidence score as the only escalation trigger**: Uncertainty escalation (agent confidence below threshold) is one of three escalation triggers. Teams that implement only confidence-based escalation miss consequence escalation (action exceeds authorised authority level) and anomaly escalation (output outside expected distribution despite high confidence).
+4. **Confidence score as the only escalation trigger**: Uncertainty escalation (agent confidence below threshold) is one of three escalation triggers. Teams that implement only confidence-based escalation miss consequence escalation (action exceeds authorised authority level) and anomaly escalation (output outside expected distribution despite high confidence).
 
-**Trust debt from premature autonomy**: Deploying agents with more autonomy than users trust them to have generates trust debt. A single high-profile error from an over-automated decision can take months of careful, conservative operation to recover from. Start conservatively; expand autonomy as reviewer agreement data supports it.
+5. **Trust debt from premature autonomy**: Deploying agents with more autonomy than users trust them to have generates trust debt. A single high-profile error from an over-automated decision can take months of careful, conservative operation to recover from. Start conservatively; expand autonomy as reviewer agreement data supports it.
 
 ## Integration
 

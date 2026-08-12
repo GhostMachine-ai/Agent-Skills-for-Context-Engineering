@@ -196,15 +196,15 @@ alert = DriftAlert(
 
 ## Gotchas
 
-**Alerting on individual wrong outputs**: A single bad output is expected non-determinism, not a system failure. Alerting on it creates alert fatigue and desensitises the team. Alert on statistical patterns — 7-day rolling rubric averages, error rates over 15-minute windows.
+1. **Alerting on individual wrong outputs**: A single bad output is expected non-determinism, not a system failure. Alerting on it creates alert fatigue and desensitises the team. Alert on statistical patterns — 7-day rolling rubric averages, error rates over 15-minute windows.
 
-**No baseline before Beta**: If rubric baselines are not set in Alpha, drift detection is impossible in Live. The team ends up asking "is this worse than before?" with no data to answer. Set baselines from Alpha evaluation runs before any Beta deployment.
+2. **No baseline before Beta**: If rubric baselines are not set in Alpha, drift detection is impossible in Live. The team ends up asking "is this worse than before?" with no data to answer. Set baselines from Alpha evaluation runs before any Beta deployment.
 
-**Logging raw prompts with PII**: Production traces that include raw user inputs or documents will almost certainly capture sensitive data. Hash identifiers, summarise document content rather than logging it verbatim, and treat trace stores as sensitive data stores with restricted access and defined retention limits.
+3. **Logging raw prompts with PII**: Production traces that include raw user inputs or documents will almost certainly capture sensitive data. Hash identifiers, summarise document content rather than logging it verbatim, and treat trace stores as sensitive data stores with restricted access and defined retention limits.
 
-**Silent model version changes**: Providers update model weights under the same name. A response from a named model version in one month may differ from the previous month with no API change. The only detection mechanism is continuous rubric sampling against a stable golden set — single-point evaluations give no signal.
+4. **Silent model version changes**: Providers update model weights under the same name. A response from a named model version in one month may differ from the previous month with no API change. The only detection mechanism is continuous rubric sampling against a stable golden set — single-point evaluations give no signal.
 
-**Prompt version drift without changelog**: A prompt change applied in production without a version bump leaves the monitoring system unable to correlate a rubric score drop with the change that caused it. Enforce prompt versioning from the first Beta deployment; a missed version increment is as harmful as a missing log entry.
+5. **Prompt version drift without changelog**: A prompt change applied in production without a version bump leaves the monitoring system unable to correlate a rubric score drop with the change that caused it. Enforce prompt versioning from the first Beta deployment; a missed version increment is as harmful as a missing log entry.
 
 ## Integration
 

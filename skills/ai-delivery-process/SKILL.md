@@ -150,6 +150,46 @@ AI additions:
 | AI Safety / Eval Lead | Beta, Live | Production monitoring; bias review; regression flags |
 | MLOps / DevOps Engineer | Beta, Live | Model serving; CI/CD for prompt changes; cost monitoring |
 
+## Examples
+
+**Example 1: Alpha → Beta phase gate review (document summarisation project)**
+| Criterion | Status | Evidence |
+|-----------|--------|---------|
+| Evaluation rubric defined with baseline scores | PASS | rubric-v1.md; baseline composite 0.84 |
+| LLM prototype tested with real users | PASS | 12 user sessions; 8 rated useful |
+| Evaluation harness built and passing | PASS | eval_harness.py; 47/50 golden set pass |
+| HITL Map tested and validated | PASS | hitl-map-v2.md; validated by 3 subject-matter experts |
+| Failure mode catalogue complete | PASS | failure-modes.md; 11 failure modes documented |
+
+**Example 2: Data Availability Matrix (Discovery artefact)**
+| Data Type | Exists | Format | Access | Gap |
+|-----------|--------|--------|--------|-----|
+| Policy documents | Yes | PDF, 2014–2026 | Internal share | Pre-2014 not digitised |
+| User query logs | No | — | — | Must design collection from scratch |
+| Manual expert decisions | Partial | Spreadsheet | — | Only 6 months of history available |
+
+## Guidelines
+
+1. Define the evaluation rubric before writing any automation code — if success cannot be measured, it cannot be achieved
+2. Build manual prototypes in Alpha before automated ones — they reveal tractability constraints faster and at lower cost
+3. Gate Alpha exit on a passing evaluation harness with a defined rubric score threshold, not just on a working prototype
+4. Treat every prompt change in Beta and Live as a software deployment: version it, test it against the rubric, stage it, document it
+5. Write the model deprecation plan in Beta; do not wait for a deprecation notice to start planning a migration
+6. Complete the Data Availability Matrix in Discovery — a data gap discovered in Beta costs far more to resolve than one found in Discovery
+7. Size the human review team for the HITL Map before Beta launch — an under-resourced review queue is a design failure, not a resourcing failure
+
+## Gotchas
+
+**Rubric defined after the prototype is built**: When success criteria are defined after building begins, teams optimise for what they built rather than what users need. The evaluation rubric must precede any automated prototype — it is a Discovery and Alpha output, not a Beta deliverable.
+
+**Treating a prompt change as a configuration change**: Prompt changes significantly alter model behaviour. Teams that deploy prompt changes without rubric testing and staged rollout discover regressions in production rather than in evaluation. Every prompt change is a deployment: version it, test it, stage it.
+
+**Underestimating model dependency risk**: A model version pinned in Alpha may be deprecated during Beta or Live. Teams without a deprecation plan scramble when the provider announces end-of-life with a 90-day window. Write the plan in Beta when planning is cheap.
+
+**Skipping the manual prototype phase**: Teams that start directly with an LLM prototype discover intractable problems — ambiguous task definition, insufficient data, unacceptable non-determinism — after investing significantly more effort. The manual prototype phase is a rapid tractability test, not a waterfall holdover.
+
+**HITL Map as an engineering artefact**: The HITL Map is a user research output, not an engineering output. Teams that design human review requirements based on their engineering model of risk, rather than on user research into trust and accountability needs, frequently discover that users require human review for legal or trust reasons even when the AI is accurate.
+
 ## Integration
 
 This skill integrates with:

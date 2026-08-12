@@ -154,6 +154,58 @@ Treat prompt changes as code changes — same review, testing, and deployment pi
 
 **Build a golden set of 20–50 representative inputs in Alpha**: re-run after every model or prompt change for a fast sanity check before full production monitoring catches a regression.
 
+## Examples
+
+**Example 1: Minimal trace schema for a document summarisation agent**
+```json
+{
+  "trace_id": "abc123",
+  "prompt_version": "1.2.0",
+  "model": "claude-3-5-sonnet",
+  "input_tokens": 3200,
+  "output_tokens": 410,
+  "cost_usd": 0.0062,
+  "latency_ms": 3100,
+  "rubric_score": 0.87,
+  "sampled_for_eval": true
+}
+```
+
+**Example 2: Drift alert definition (pseudocode)**
+```python
+# This is pseudocode demonstrating the pattern.
+alert = DriftAlert(
+    metric="rubric_composite_score",
+    baseline=0.88,
+    window_days=7,
+    threshold_drop=0.3,
+    severity="HIGH",
+    notify=["oncall@service.example"]
+)
+```
+
+## Guidelines
+
+1. Emit structured traces for every agent interaction from Alpha onward — retrofitting observability is expensive
+2. Hash user identifiers before logging; never log raw PII in traces
+3. Alert on statistical patterns over time windows, not on individual output anomalies
+4. Establish Alpha rubric scores as the official baseline before Beta begins
+5. Treat every prompt change as a deployment: increment the semantic version, record before/after rubric scores, stage rollout at 5–10% before expanding
+6. Build a golden evaluation set of 20–50 representative inputs in Alpha; re-run after every model or prompt change
+7. Monitor cost-per-interaction as a first-class metric alongside quality — cost spikes frequently precede quality degradation
+
+## Gotchas
+
+**Alerting on individual wrong outputs**: A single bad output is expected non-determinism, not a system failure. Alerting on it creates alert fatigue and desensitises the team. Alert on statistical patterns — 7-day rolling rubric averages, error rates over 15-minute windows.
+
+**No baseline before Beta**: If rubric baselines are not set in Alpha, drift detection is impossible in Live. The team ends up asking "is this worse than before?" with no data to answer. Set baselines from Alpha evaluation runs before any Beta deployment.
+
+**Logging raw prompts with PII**: Production traces that include raw user inputs or documents will almost certainly capture sensitive data. Hash identifiers, summarise document content rather than logging it verbatim, and treat trace stores as sensitive data stores with restricted access and defined retention limits.
+
+**Silent model version changes**: Providers update model weights under the same name. A response from a named model version in one month may differ from the previous month with no API change. The only detection mechanism is continuous rubric sampling against a stable golden set — single-point evaluations give no signal.
+
+**Prompt version drift without changelog**: A prompt change applied in production without a version bump leaves the monitoring system unable to correlate a rubric score drop with the change that caused it. Enforce prompt versioning from the first Beta deployment; a missed version increment is as harmful as a missing log entry.
+
 ## Integration
 
 This skill integrates with:

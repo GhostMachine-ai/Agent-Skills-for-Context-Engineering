@@ -12,6 +12,27 @@
       "claim_ids": ["claim-advanced-evaluation-position-swap"]
     },
     {
+      "name": "agent-observability",
+      "path": "skills/agent-observability/SKILL.md",
+      "activation_scenarios": ["production agent monitoring", "drift detection", "prompt versioning", "token cost tracking", "agent alerting"],
+      "mechanism_ids": [],
+      "claim_ids": []
+    },
+    {
+      "name": "ai-delivery-process",
+      "path": "skills/ai-delivery-process/SKILL.md",
+      "activation_scenarios": ["AI project delivery phases", "phase gate review", "AI team staffing", "evaluation-driven development", "model dependency management"],
+      "mechanism_ids": [],
+      "claim_ids": []
+    },
+    {
+      "name": "atomic-agents",
+      "path": "skills/atomic-agents/SKILL.md",
+      "activation_scenarios": ["building agents with atomic-agents", "BaseIOSchema design", "Instructor-backed agent pipelines", "typed agent chaining", "system prompt context providers"],
+      "mechanism_ids": [],
+      "claim_ids": []
+    },
+    {
       "name": "bdi-mental-states",
       "path": "skills/bdi-mental-states/SKILL.md",
       "activation_scenarios": ["belief-desire-intention modeling", "rational agency traces", "neuro-symbolic state transformations"],
@@ -72,6 +93,13 @@
       "path": "skills/hosted-agents/SKILL.md",
       "activation_scenarios": ["background agents", "remote sandboxed execution", "warm pools", "multiplayer agent infrastructure"],
       "mechanism_ids": ["prebuilt-warm-sandbox-pool"],
+      "claim_ids": []
+    },
+    {
+      "name": "human-ai-collaboration",
+      "path": "skills/human-ai-collaboration/SKILL.md",
+      "activation_scenarios": ["human-in-the-loop workflow design", "HITL Map creation", "automation level calibration", "escalation trigger design", "oversight fatigue prevention"],
+      "mechanism_ids": [],
       "claim_ids": []
     },
     {

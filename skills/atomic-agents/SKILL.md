@@ -20,6 +20,8 @@ Activate this skill when:
 - Debugging schema validation errors in Instructor-backed agents
 - Integrating atomic-agents with OpenAI, Anthropic, Groq, Ollama, or Gemini
 
+Do not activate for: general multi-agent architecture questions without the atomic-agents library (use `multi-agent-patterns`), memory architecture design not tied to atomic-agents (use `memory-systems`), evaluation rubric design (use `evaluation`), or choosing between agent frameworks without a preference for atomic-agents (use `project-development`).
+
 ## Core Concepts
 
 Every agent in atomic-agents is a `BaseAgent` instance with three explicit contracts: an `input_schema` (what it accepts), an `output_schema` (what it returns), and a `system_prompt_generator` (how it is instructed). Both schemas are Pydantic models, so validation and serialization are guaranteed by the runtime. Instructor handles the LLM call and enforces that the model's response parses into the output schema — retrying on failure.
@@ -270,6 +272,20 @@ classified = classifier.run(
 6. Use `run_async()` for independent parallel agent calls to avoid sequential bottlenecks
 7. Write tool docstrings as if they are tool descriptions in the tool-design skill — answer what, when, and what returns
 8. Validate pipeline correctness with typed assertions on output fields, not just on `chat_message` strings
+
+## Gotchas
+
+**Overloading `chat_message` with all structured data**: The `chat_message` field is for the human-readable conversation turn, not a JSON dump of all outputs. Placing structured data inside it bypasses Instructor's schema enforcement and loses the type-safety guarantees that make atomic-agents worth using. Use additional typed fields on the output schema.
+
+**Sharing `AgentMemory` across agents**: Each agent should own its own `AgentMemory` instance. Passing the same memory object to multiple agents causes cross-task context contamination — one agent's history poisons another's context window. This is the context poisoning failure mode from context-degradation, reproduced in Python object form.
+
+**Sparse field descriptions on `BaseIOSchema`**: The `Field(description=...)` value becomes the JSON schema description that Instructor passes to the model. Fields with no description or terse descriptions degrade extraction accuracy — the model cannot distinguish between similar fields or populate rare ones correctly. Write descriptions as if you are writing tool documentation.
+
+**Monolithic output schemas**: Output schemas with 15+ fields are hard for models to populate reliably. The model must simultaneously track and populate many fields, and the probability of at least one field being wrong grows with schema size. Decompose into smaller agents with focused outputs, then combine in an orchestrator.
+
+**Blocking on sequential agent calls that could be parallel**: The default composition pattern is sequential, but many pipeline stages are independent. Failing to use `run_async()` for independent calls serialises wall-clock time unnecessarily. Profile pipeline latency before assuming the model is the bottleneck — often the bottleneck is sequential I/O.
+
+**Not resetting memory between logical tasks**: If a single agent instance handles multiple logical tasks in sequence, history from earlier tasks leaks into later ones. Call `agent.memory.reset()` at task boundaries unless cross-task history is intentionally needed.
 
 ## Integration
 

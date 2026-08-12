@@ -104,6 +104,10 @@ Internal skills in this collection:
 - [harness-engineering](skills/harness-engineering/SKILL.md)
 - [project-development](skills/project-development/SKILL.md)
 - [bdi-mental-states](skills/bdi-mental-states/SKILL.md)
+- [atomic-agents](skills/atomic-agents/SKILL.md)
+- [ai-delivery-process](skills/ai-delivery-process/SKILL.md)
+- [agent-observability](skills/agent-observability/SKILL.md)
+- [human-ai-collaboration](skills/human-ai-collaboration/SKILL.md)
 
 External resources on context engineering:
 - Research on attention mechanisms and context window limitations

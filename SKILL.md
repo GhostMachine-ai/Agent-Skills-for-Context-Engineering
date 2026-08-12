@@ -56,6 +56,9 @@ Techniques include compaction (summarizing context near limits), observation mas
 **Latent Briefing (KV Memory Sharing)**
 Orchestrator-worker systems can compound tokens when supervisors accumulate long trajectories but workers see only narrow text slices. Latent Briefing compacts the orchestrator trajectory in the worker model's KV cache using task-guided attention (Attention Matching-style compaction) so workers receive relevant latent state without full-text replay when the stack exposes worker KV state and the models are compatible.
 
+**System Design Metrics**
+Production agent systems require quantitative engineering metrics beyond output quality: latency budgets (TTFT, end-to-end, tool-call overhead), cost-per-task modeling (token costs, multi-step accumulation, model tiering), reliability targets (error budgets, SLOs, cascade failure math), and throughput planning (rate limits, backpressure, scaling dimensions). Cost-per-task is the north-star metric for agent economics.
+
 **Evaluation Frameworks**
 Production agent evaluation requires deterministic checks and multi-dimensional rubrics covering factual accuracy, completeness, tool efficiency, and process quality. Use model judges only after structure, evidence, and rubric math are valid; route judge design, pairwise comparison, and bias mitigation to Advanced Evaluation.
 
@@ -98,6 +101,7 @@ Internal skills in this collection:
 - [filesystem-context](skills/filesystem-context/SKILL.md)
 - [hosted-agents](skills/hosted-agents/SKILL.md)
 - [context-optimization](skills/context-optimization/SKILL.md)
+- [system-design-metrics](skills/system-design-metrics/SKILL.md)
 - [latent-briefing](skills/latent-briefing/SKILL.md)
 - [evaluation](skills/evaluation/SKILL.md)
 - [advanced-evaluation](skills/advanced-evaluation/SKILL.md)

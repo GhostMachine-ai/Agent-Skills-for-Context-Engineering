@@ -103,6 +103,13 @@
       "claim_ids": ["claim-project-development-vercel-d0-reduction"]
     },
     {
+      "name": "system-design-metrics",
+      "path": "skills/system-design-metrics/SKILL.md",
+      "activation_scenarios": ["estimate agent costs", "design latency budgets", "plan capacity", "set SLA targets", "measure throughput", "cost-per-task modeling"],
+      "mechanism_ids": ["cost-per-task-modeling"],
+      "claim_ids": []
+    },
+    {
       "name": "tool-design",
       "path": "skills/tool-design/SKILL.md",
       "activation_scenarios": ["agent-tool contracts", "tool schema design", "tool consolidation", "actionable error recovery"],

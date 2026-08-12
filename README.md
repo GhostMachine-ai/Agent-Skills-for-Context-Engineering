@@ -124,7 +124,7 @@ Option B - Direct install via command:
 /plugin install context-engineering@context-engineering-marketplace
 ```
 
-This installs all 18 skills in a single plugin. Skills are activated automatically based on your task context.
+This installs all 19 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Activation Scenarios
 
@@ -164,7 +164,7 @@ This repository ships as an [Open Plugins](https://open-plugins.com) plugin. Hos
 **Codex / GitHub Copilot CLI / other Open Plugins hosts:**
 
 1. Clone or add this repository as a plugin directory.
-2. The host reads `.plugin/plugin.json` and discovers all 15 skills under `skills/`.
+2. The host reads `.plugin/plugin.json` and discovers all 19 skills under `skills/`.
 3. For project-local manual installs, copy skill directories into `.codex/skills/` or the host's documented Agent Skills directory.
 
 ### Using Individual Skills

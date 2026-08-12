@@ -70,6 +70,16 @@ These skills cover formal cognitive modeling for rational agent systems.
 |-------|-------------|
 | [bdi-mental-states](skills/bdi-mental-states/) | **NEW** Transform external RDF context into agent mental states (beliefs, desires, intentions) using formal BDI ontology patterns for deliberative reasoning and explainability |
 
+### Delivery Methodology Skills
+
+These skills support teams delivering AI agent systems through the full agile delivery lifecycle.
+
+| Skill | Description |
+|-------|-------------|
+| [ai-delivery-process](skills/ai-delivery-process/) | **NEW** Full agile delivery process adapted for AI/agent systems: phase-gate criteria, AI-specific artefacts (Data Availability Matrix, Evaluation Rubric, HITL Map), team roles, and phase-by-phase activities |
+| [agent-observability](skills/agent-observability/) | **NEW** Production monitoring for AI agents: metrics taxonomy, trace design, drift detection (model/prompt/data), prompt versioning, sampling strategy, and alerting thresholds |
+| [human-ai-collaboration](skills/human-ai-collaboration/) | **NEW** Human-in-the-loop design: automation spectrum (5 levels), HITL Map artefact, trust calibration, oversight fatigue mitigation, and graceful degradation patterns |
+
 ## Design Philosophy
 
 ### Progressive Disclosure
@@ -114,7 +124,7 @@ Option B - Direct install via command:
 /plugin install context-engineering@context-engineering-marketplace
 ```
 
-This installs all 15 skills in a single plugin. Skills are activated automatically based on your task context.
+This installs all 19 skills in a single plugin. Skills are activated automatically based on your task context.
 
 ### Skill Activation Scenarios
 
@@ -135,6 +145,9 @@ This installs all 15 skills in a single plugin. Skills are activated automatical
 | `harness-engineering` | Designing autonomous loops with locked evaluators, editable surfaces, durable logs, novelty gates, rollback, and approval boundaries |
 | `project-development` | Deciding whether an LLM is appropriate, shaping batch pipelines, creating staged artifacts, or estimating operational cost |
 | `bdi-mental-states` | Modeling beliefs, desires, intentions, rational action traces, or neuro-symbolic state transformations for agents |
+| `ai-delivery-process` | Planning an AI project delivery, running phase gate reviews, defining AI-specific artefacts, staffing an AI delivery team |
+| `agent-observability` | Setting up production monitoring for AI agents, detecting prompt/model/data drift, implementing prompt versioning |
+| `human-ai-collaboration` | Designing human-in-the-loop workflows, choosing automation levels, creating HITL Maps, managing oversight fatigue |
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 
@@ -151,7 +164,7 @@ This repository ships as an [Open Plugins](https://open-plugins.com) plugin. Hos
 **Codex / GitHub Copilot CLI / other Open Plugins hosts:**
 
 1. Clone or add this repository as a plugin directory.
-2. The host reads `.plugin/plugin.json` and discovers all 15 skills under `skills/`.
+2. The host reads `.plugin/plugin.json` and discovers all 19 skills under `skills/`.
 3. For project-local manual installs, copy skill directories into `.codex/skills/` or the host's documented Agent Skills directory.
 
 ### Using Individual Skills
@@ -178,7 +191,7 @@ cp -R skills/context-fundamentals .agents/skills/
 
 Do not flatten `SKILL.md` into a single file at `.claude/skills/context-fundamentals.md`. That breaks relative `references/` paths and violates the Agent Skills directory spec used by Cursor, Claude Code, and Codex.
 
-Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `harness-engineering`, `project-development`, `bdi-mental-states`
+Available skills: `context-fundamentals`, `context-degradation`, `context-compression`, `context-optimization`, `latent-briefing`, `multi-agent-patterns`, `memory-systems`, `tool-design`, `filesystem-context`, `hosted-agents`, `evaluation`, `advanced-evaluation`, `harness-engineering`, `project-development`, `bdi-mental-states`, `atomic-agents`, `ai-delivery-process`, `agent-observability`, `human-ai-collaboration`
 
 ### For Custom Implementations
 
@@ -195,6 +208,7 @@ The [examples](examples/) folder contains complete system designs that demonstra
 | [llm-as-judge-skills](examples/llm-as-judge-skills/) | Production-ready LLM evaluation tools with TypeScript implementation, 19 passing tests | advanced-evaluation, tool-design, context-fundamentals, evaluation |
 | [book-sft-pipeline](examples/book-sft-pipeline/) | Train models to write in any author's style. Includes Gertrude Stein case study with 70% human score on Pangram, $2 total cost | project-development, context-compression, multi-agent-patterns, evaluation |
 | [interleaved-thinking](examples/interleaved-thinking/) | Reasoning trace optimizer that captures, analyzes, and converts agent failure patterns into generated skills | evaluation, advanced-evaluation, context-degradation, harness-engineering |
+| [ai-delivery-process-agent](examples/ai-delivery-process-agent/) | **NEW** Complete worked example of an AI agent project (AI Document Summariser) delivered through all five phases, with completed artefacts, decision traceability, and automation scripts | ai-delivery-process, agent-observability, human-ai-collaboration, evaluation |
 
 Each example includes:
 - Complete PRD with architecture decisions

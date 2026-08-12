@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Agent Skills for Context Engineering: an open collection of 15 Agent Skills teaching context engineering and harness engineering principles for production AI agent systems. Skills are platform-agnostic (Claude Code, Cursor, Codex/OpenAI Agent Skills, GitHub Copilot, any Open Plugins-conformant tool). v2.3.1 ships a file-based researcher operating system with deterministic gates, cross-platform Agent Skills validation, and a continuous loop.
+Agent Skills for Context Engineering: an open collection of 19 skills teaching context engineering and harness engineering principles for production AI agent systems. Skills are platform-agnostic (Claude Code, Cursor, Codex/OpenAI Agent Skills, GitHub Copilot, any Open Plugins-conformant tool). v2.3.1 ships a file-based researcher operating system with deterministic gates, cross-platform Agent Skills validation, and a continuous loop.
 
 Context engineering is the discipline of curating everything that enters a model's context window (system prompts, tool definitions, retrieved documents, message history, tool outputs) to maximize signal within limited attention budget.
 

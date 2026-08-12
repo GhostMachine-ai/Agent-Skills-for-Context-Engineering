@@ -276,6 +276,8 @@ This skill owns project-shape and pipeline decisions. Adjacent decisions are own
 - `context-fundamentals`: the conceptual frame for context constraints that inform prompt design at every stage.
 - `evaluation`: outcome measurement and quality gates for pipeline runs.
 - `context-compression`: when long-running pipeline stages produce trajectories that need summarization.
+- `ai-delivery-process`: when the question is about the delivery lifecycle and phase-gate process for an AI project (staffing, artefacts, phase exit criteria), not about pipeline architecture. Route questions about "what phase are we in" or "what artefacts are needed for Alpha" to that skill; route questions about "what shape should the pipeline take" to this skill.
+- `agent-observability`: when the question is about production monitoring, prompt versioning, or drift detection for a live AI system. This skill covers project design; agent-observability covers what happens after deployment.
 
 ## References
 

@@ -1,6 +1,6 @@
 ---
 name: human-ai-collaboration
-description: This skill should be used when the user asks to "design human-in-the-loop workflow", "when should agents escalate to humans", "build trust in AI outputs", "design agent oversight", "calibrate automation level", "create human review process", "define HITL requirements", or mentions human-in-the-loop, HITL, AI oversight, automation level, trust calibration, escalation paths, human-agent teaming, or oversight fatigue. Provides frameworks for designing workflows where humans and AI collaborate effectively.
+description: "This skill should be used when the user asks to design a human-in-the-loop workflow, when should agents escalate to humans, build trust in AI outputs, design agent oversight, calibrate automation level, create a human review process, define HITL requirements, or mentions human-in-the-loop, HITL, AI oversight, automation level, trust calibration, escalation paths, human-agent teaming, or oversight fatigue. Provides frameworks for designing workflows where humans and AI collaborate effectively."
 ---
 
 # Human-AI Collaboration

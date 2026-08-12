@@ -1,6 +1,6 @@
 ---
 name: atomic-agents
-description: This skill should be used when the user asks to "build an agent with atomic-agents", "use Instructor for agent I/O", "create a BaseAgent", "design typed agent schemas", "chain agents together", or mentions atomic-agents, BrainBlend-AI, BaseIOSchema, system prompt context providers, or Pydantic-validated agent pipelines.
+description: "This skill should be used when the user asks to build an agent with atomic-agents, use Instructor for agent I/O, create a BaseAgent, design typed agent schemas, chain agents together, or mentions atomic-agents, BrainBlend-AI, BaseIOSchema, system prompt context providers, or Pydantic-validated agent pipelines."
 ---
 
 # Atomic Agents Framework

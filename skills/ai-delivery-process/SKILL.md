@@ -1,6 +1,6 @@
 ---
 name: ai-delivery-process
-description: This skill should be used when the user asks to "plan an AI project delivery", "what phase are we in", "what should we have at end of discovery", "how do we staff an AI team", "create delivery plan for agent system", "what artefacts are required for alpha", "define phase gate criteria for AI project", or mentions agile phases, delivery process, sprint planning for AI, MVP for agent systems, project phase gates, or AI service delivery. Provides the full agile delivery process adapted for AI/agent systems.
+description: "This skill should be used when the user asks to plan an AI project delivery, what phase are we in, what should we have at end of discovery, how do we staff an AI team, create a delivery plan for an agent system, what artefacts are required for alpha, define phase gate criteria for an AI project, or mentions agile phases, delivery process, sprint planning for AI, MVP for agent systems, project phase gates, or AI service delivery. Provides the full agile delivery process adapted for AI/agent systems."
 ---
 
 # AI Delivery Process

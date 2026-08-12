@@ -1,6 +1,6 @@
 ---
 name: agent-observability
-description: This skill should be used when the user asks to "monitor agent in production", "debug agent failures", "trace agent decisions", "detect prompt drift", "set up agent logging", "measure agent performance over time", "track LLM costs", "agent telemetry", "LLM observability", or mentions agent tracing, model drift, prompt regression, production agent monitoring, token cost tracking, or agent alerting. Provides the full observability stack for production AI agent systems.
+description: "This skill should be used when the user asks to monitor agent in production, debug agent failures, trace agent decisions, detect prompt drift, set up agent logging, measure agent performance over time, track LLM costs, or mentions agent tracing, model drift, prompt regression, production agent monitoring, token cost tracking, or agent alerting. Provides the full observability stack for production AI agent systems."
 ---
 
 # Agent Observability

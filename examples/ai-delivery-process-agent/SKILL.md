@@ -1,6 +1,6 @@
 ---
 name: ai-delivery-process-example
-description: This skill should be used when the user asks for a worked example of AI project delivery, wants to see completed artefacts for a real project, or wants to understand how ai-delivery-process, agent-observability, and human-ai-collaboration skills apply in practice. Do not activate for general delivery process questions — use the ai-delivery-process skill instead.
+description: "This skill should be used when the user asks for a worked example of AI project delivery, wants to see completed artefacts for a real project, or wants to understand how ai-delivery-process, agent-observability, and human-ai-collaboration skills apply in practice. Do not activate for general delivery process questions — use the ai-delivery-process skill instead."
 ---
 
 # AI Delivery Process — Worked Example
